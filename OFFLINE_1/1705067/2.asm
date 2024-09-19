@@ -1,0 +1,63 @@
+.MODEL SMALL
+
+.STACK 100H
+
+.DATA
+    CR EQU 0DH
+    LF EQU 0AH
+    
+    MSG1 DB 'ENTER A UPPER CASE LETTER: $'
+    MSG2 DB CR,LF,'THE PREVIOUS LOWER CASE LETTER: $'
+    MSG3 DB CR,LF,'THE ONES COMPLEMENT: $'
+    CHAR DB ? 
+    COMP DB ?
+
+.CODE
+
+MAIN PROC
+    MOV AX,@DATA
+    MOV DS,AX
+    
+    MOV AH,9
+    LEA DX,MSG1
+    INT 21H
+    
+    MOV AH,1
+    INT 21H
+    
+    MOV BL,AL
+    
+    ;PREVIOUS LOWER CASE LETTER
+    
+    ADD AL,1FH
+    MOV CHAR,AL
+    
+    MOV AH,9
+    LEA DX,MSG2
+    INT 21H
+    
+    MOV AH,2
+    MOV DL,CHAR
+    INT 21H
+    
+    ;1'S COMPLEMENT
+    
+    MOV CL,0FFH
+    SUB CL,BL 
+    MOV COMP,CL
+    
+    MOV AH,9
+    LEA DX,MSG3
+    INT 21H  
+    
+    MOV AH,2
+    MOV DL,COMP
+    INT 21H
+    
+    MOV AH,4CH
+    INT 21H
+    
+MAIN ENDP
+
+    END MAIN
+    
